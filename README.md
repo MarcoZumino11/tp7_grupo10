@@ -1,18 +1,51 @@
-## Getting Started
+# TP7 – Relaciones entre clases, herencia y polimorfismo  
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
+**Grupo 10**
 
-## Folder Structure
+## Integrantes
+- Lautaro Muro  
+- Lucas Luciano Camino  
+- Thiago Rueda  
+- Lucas Fernández  
+- Marco Zumino  
 
-The workspace contains two folders by default, where:
 
-- `src`: the folder to maintain sources
-- `lib`: the folder to maintain dependencies
+## Descripción del trabajo
 
-Meanwhile, the compiled output files will be generated in the `bin` folder by default.
+Se desarrolló un sistema que permite registrar clientes, productos y facturas, manejando relaciones entre clases y aplicando herencia y polimorfismo.
 
-> If you want to customize the folder structure, open `.vscode/settings.json` and update the related settings there.
+El programa permite:
+- Crear productos y gestionar el stock.  
+- Registrar clientes mayoristas y minoristas.  
+- Realizar ventas y generar facturas.  
+- Calcular totales con descuentos según el tipo de cliente.  
+- Consultar facturas y el total de ventas.
 
-## Dependency Management
 
-The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).
+## Estructura del proyecto
+
+src/
+├── ar.edu.unju.escmi.tp7.collections/
+│ ├── CollectionCliente.java
+│ ├── CollectionProducto.java
+│ ├── CollectionFactura.java
+│ └── CollectionStock.java
+│
+├── ar.edu.unju.escmi.tp7.dominio/
+│ ├── Cliente.java
+│ ├── ClienteMayorista.java
+│ ├── ClienteMinorista.java
+│ ├── Producto.java
+│ ├── Stock.java
+│ ├── Detalle.java
+│ └── Factura.java
+│
+└── ar.edu.unju.escmi.tp7.principal/
+└── Main.java
+
+## Conceptos aplicados
+- Encapsulamiento  
+- Herencia y polimorfismo  
+- Relaciones entre clases (asociación y composición)  
+- Uso de colecciones (`ArrayList`)  
+- Métodos estáticos para gestión de objetos 
