@@ -2,39 +2,45 @@ package ar.edu.unju.escmi.tp7.collections;
 
 import java.util.ArrayList;
 import java.util.List;
-import ar.edu.unju.escmi.tp7.dominio.*;
+
+import ar.edu.unju.escmi.tp7.dominio.Cliente;
 
 public class CollectionCliente {
 
-    public static List<Cliente> clientes = new ArrayList<>();
+	public static List<Cliente> clientes = new ArrayList<Cliente>();
 
-    public static void agregarCliente(Cliente c) {
-        clientes.add(c);
-    }
-
-    public static Cliente buscarClientePorNombre(String nombre) {
-        for (Cliente c : clientes) {
-            if (c.getNombre().equalsIgnoreCase(nombre)) {
-                return c;
-            }
-        }
-        return null;
-    }
-
-    public static void mostrarClientes() {
-        if (clientes.isEmpty()) {
-            System.out.println("No hay clientes registrados.");
-        } else {
-            for (Cliente c : clientes) {
-                c.mostrarDatos();
-                System.out.println("--------------------------------");
-            }
-        }
-    }
 
     public static void precargarClientes() {
-        clientes.add(new ClienteMayorista("Distribuidora Norte", "San Salvador", "30-12345678-9", 0.15));
-        clientes.add(new ClienteMinorista("Lautaro Muro", "Palpalá", 45321789, "3887654321"));
-        clientes.add(new ClienteMinorista("Lucas Fernández", "San Salvador", 45999888, "3881234567"));
+        if (clientes.isEmpty()) {
+            clientes.add(new Cliente(45111222, "Mario Barca", "Alvear 120", "65454686"));
+            clientes.add(new Cliente(36888666, "Juan Perez", "Av. Belgrano 300", "35185695"));
+            clientes.add(new Cliente(25777555, "Ana Juarez", "Islas Malvinas 731", "38845224"));
+        }
+    }
+
+
+    public static void agregarCliente(Cliente cliente) {
+    	try {
+    		clientes.add(cliente);
+		} catch (Exception e) {
+			System.out.println("\nNO SE PUEDE GUARDAR EL CLIENTE");
+		}
+        
+    }
+
+    public static Cliente buscarCliente(long dni) {
+        Cliente clienteEncontrado = null;
+
+        try {
+        	for (Cliente cli : clientes) {
+                if (cli.getDni() == dni) {
+                    clienteEncontrado = cli;
+                }
+            }
+		} catch (Exception e) {
+			return null;
+		}
+        
+        return clienteEncontrado;
     }
 }

@@ -2,14 +2,36 @@ package ar.edu.unju.escmi.tp7.dominio;
 
 public class Detalle {
 
-    private Producto producto;
-    private int cantidad;
+	private int cantidad;
     private double importe;
+    private Producto producto;
+    private boolean estadoAhora30; /* true = el detalle es de un producto 'Ahora 30' y false = el detalle no es de un producto 'Ahora 30' */
 
-    public Detalle(Producto producto, int cantidad) {
-        this.producto = producto;
+    public Detalle() {
+
+    }
+
+    public Detalle(int cantidad, double importe, Producto producto, boolean estadoAhora30) {
         this.cantidad = cantidad;
-        this.importe = producto.getPrecioUnitario() * cantidad;
+        this.importe = importe;
+        this.producto = producto;
+        this.estadoAhora30 = estadoAhora30;
+    }
+
+    public int getCantidad() {
+        return cantidad;
+    }
+
+    public void setCantidad(int cantidad) {
+        this.cantidad = cantidad;
+    }
+
+    public double getImporte() {
+        return importe;
+    }
+
+    public void setImporte(double importe) {
+        this.importe = importe;
     }
 
     public Producto getProducto() {
@@ -20,26 +42,21 @@ public class Detalle {
         this.producto = producto;
     }
 
-    public int getCantidad() {
-        return cantidad;
+    public boolean isEstadoAhora30() {
+        return estadoAhora30;
     }
 
-    public void setCantidad(int cantidad) {
-        this.cantidad = cantidad;
-        this.importe = producto.getPrecioUnitario() * cantidad;
-    }
-
-    public double getImporte() {
-        return importe;
-    }
-
-    // Muestra el detalle de un producto dentro de una factura
-    public void mostrarDetalle() {
-        System.out.println(producto.getDescripcion() + " x" + cantidad + " = $" + importe);
+    public void setEstadoAhora30(boolean estadoAhora30) {
+        this.estadoAhora30 = estadoAhora30;
     }
 
     @Override
     public String toString() {
-        return producto.getDescripcion() + " x" + cantidad + " - $" + importe;
+        return "--- PRODUCTO ---" + producto + 
+            "\nCANTIDAD: " + cantidad +
+            "\nIMPORTE: $" + importe + 
+            "\n" + (estadoAhora30 ? "PERTENECE AL PROGRAMA AHORA 30" : "PRODUCTO NORMAL");
     }
+
+    
 }

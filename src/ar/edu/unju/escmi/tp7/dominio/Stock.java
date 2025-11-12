@@ -1,13 +1,23 @@
 package ar.edu.unju.escmi.tp7.dominio;
 
 public class Stock {
+	private int cantidad;
+	private Producto producto;
 
-    private Producto producto;
-    private int cantidadDisponible;
+	public Stock() {
+    }
 
-    public Stock(Producto producto, int cantidadDisponible) {
+    public Stock(int cantidad, Producto producto) {
+        this.cantidad = cantidad;
         this.producto = producto;
-        this.cantidadDisponible = cantidadDisponible;
+    }
+
+    public int getCantidad() {
+        return cantidad;
+    }
+
+    public void setCantidad(int cantidad) {
+        this.cantidad = cantidad;
     }
 
     public Producto getProducto() {
@@ -18,32 +28,20 @@ public class Stock {
         this.producto = producto;
     }
 
-    public int getCantidadDisponible() {
-        return cantidadDisponible;
-    }
-
-    public void setCantidadDisponible(int cantidadDisponible) {
-        this.cantidadDisponible = cantidadDisponible;
-    }
-
-    public void actualizarStock(int cantidad) {
-        this.cantidadDisponible += cantidad;
-        if (this.cantidadDisponible < 0) {
-            this.cantidadDisponible = 0;
+    /* Metodos */
+    public boolean validarStockDisponible (int cantidadSolicitada) {
+        if (this.cantidad < cantidadSolicitada) {
+            return false;
         }
+        return true;
     }
 
-    public boolean hayStockSuficiente(int cantidad) {
-        return cantidadDisponible >= cantidad;
-    }
-
-    public void mostrarDatos() {
-        System.out.println("Producto: " + producto.getDescripcion());
-        System.out.println("Cantidad disponible: " + cantidadDisponible);
-    }
-
-    @Override
-    public String toString() {
-        return producto.getDescripcion() + " | Stock: " + cantidadDisponible;
+    public void actualizarStock (int cantidadVendida) {
+        if (cantidadVendida > this.cantidad) {
+            System.out.println("No hay stock suficiente");
+        }
+        else {
+            this.cantidad = this.cantidad - cantidadVendida;
+        }
     }
 }

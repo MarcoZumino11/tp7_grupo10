@@ -2,48 +2,71 @@ package ar.edu.unju.escmi.tp7.collections;
 
 import java.util.ArrayList;
 import java.util.List;
-import ar.edu.unju.escmi.tp7.dominio.*;
+
+import ar.edu.unju.escmi.tp7.dominio.Factura;
 
 public class CollectionFactura {
 
-    public static List<Factura> facturas = new ArrayList<>();
+	public static List<Factura> facturas = new ArrayList<Factura>();
 
-    public static void agregarFactura(Factura f) {
-        facturas.add(f);
-    }
+	
 
-    public static Factura buscarFacturaPorNumero(int numero) {
-        for (Factura f : facturas) {
-            if (f.getNumero() == numero) {
-                return f;
-            }
-        }
-        return null;
-    }
+	public static void agregarFactura(Factura factura) {
+		
+		try {
+			facturas.add(factura);
+		} catch (Exception e) {
+			System.out.println("\nNO SE PUEDE GUARDAR LA FACTURA");
+		}
+		
+	}
 
-    public static void mostrarFacturas() {
-        if (facturas.isEmpty()) {
-            System.out.println("No hay facturas registradas.");
-        } else {
-            for (Factura f : facturas) {
-                f.mostrarFactura();
-            }
-        }
-    }
+	public static Factura buscarFactura(long nroFactura) {
+		Factura facturaEncontrada = null;
+		
+		try {
+			if (facturas != null) {
+				for (Factura fac : facturas) {
+					if (fac.getNroFactura() == nroFactura) {
+						facturaEncontrada = fac;
+					}
+				}
+			}
+		} catch (Exception e) {
+			return null;
+		}
+		
+		return facturaEncontrada;
+	}
 
-    public static void precargarFacturas() {
-        if (CollectionCliente.clientes.isEmpty() || CollectionProducto.productos.isEmpty()) {
-            System.out.println("No hay clientes o productos para generar facturas.");
-            return;
-        }
+	public static void buscarFacturasPorDni(long dni) {
 
-        Cliente cliente = CollectionCliente.clientes.get(0);
-        Factura factura = new Factura(1, cliente);
+		System.out.println("=================================================");
+		System.out.println("BUSCANDO FACTURAS PARA DNI: " + dni);
+		System.out.println("=================================================");
 
-        Producto p = CollectionProducto.productos.get(0);
-        Detalle d = new Detalle(p, 2);
+		boolean encontrado = false;
 
-        factura.agregarDetalle(d);
-        facturas.add(factura);
-    }
+		try {
+			if (facturas != null && !facturas.isEmpty()) {
+				for (Factura fac : facturas) {
+					try {
+						if (fac.getCliente() != null && fac.getCliente().getDni() == dni) {
+							System.out.println(fac.toString());
+							encontrado = true;
+						}
+					} catch (NullPointerException e) {
+						System.out.println("Advertencia: factura incompleta encontrada y omitida.");
+					}
+				}
+			}
+
+			if (!encontrado) {
+				System.out.println(" No se encontraron facturas asociadas al DNI " + dni + ".");
+			}
+
+		} catch (Exception e) {
+			System.out.println("ERROR durante la búsqueda de facturas: " + e.getMessage());
+		}
+	}
 }
