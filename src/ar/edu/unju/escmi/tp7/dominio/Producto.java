@@ -2,23 +2,27 @@ package ar.edu.unju.escmi.tp7.dominio;
 
 public class Producto {
 
-    private int codigo;
+	private long codigo;
     private String descripcion;
     private double precioUnitario;
     private String origenFabricacion;
 
-    public Producto(int codigo, String descripcion, double precioUnitario, String origenFabricacion) {
+    public Producto() {
+
+    }
+
+    public Producto(long codigo, String descripcion, double precioUnitario, String origenFabricacion) {
         this.codigo = codigo;
         this.descripcion = descripcion;
         this.precioUnitario = precioUnitario;
         this.origenFabricacion = origenFabricacion;
     }
 
-    public int getCodigo() {
+    public long getCodigo() {
         return codigo;
     }
 
-    public void setCodigo(int codigo) {
+    public void setCodigo(long codigo) {
         this.codigo = codigo;
     }
 
@@ -46,19 +50,9 @@ public class Producto {
         this.origenFabricacion = origenFabricacion;
     }
 
-    public double aplicarDescuento(double porcentajeDescuento) {
-        return precioUnitario * (1 - porcentajeDescuento);
-    }
-
-    public void mostrarDatos() {
-        System.out.println("Código: " + codigo);
-        System.out.println("Descripción: " + descripcion);
-        System.out.println("Precio Unitario: $" + precioUnitario);
-        System.out.println("Origen de Fabricación: " + origenFabricacion);
-    }
-
     @Override
     public String toString() {
-        return codigo + " - " + descripcion + " ($" + precioUnitario + ")";
+        return "\nCodigo: " + codigo + "\nDescripcion: " + descripcion + "\nPrecio Unitario: " + precioUnitario
+                + "\nOrigen fabricacion: " + origenFabricacion;
     }
 }
