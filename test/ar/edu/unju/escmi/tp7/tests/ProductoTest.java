@@ -8,13 +8,14 @@ public class ProductoTest {
 
     @Test
     public void testPrecioPositivo() {
-        Producto p = new Producto("P003", "Monitor", 80000.0, 5);
-        assertTrue(p.getPrecio() > 0, "El precio del producto debe ser positivo");
+        Producto p = new Producto(1001, "Monitor", 80000.0, "Argentina");
+        assertTrue(p.getPrecioUnitario() > 0, "El precio del producto debe ser positivo");
     }
 
     @Test
-    public void testStockInicialCorrecto() {
-        Producto p = new Producto("P004", "Impresora", 120000.0, 8);
-        assertEquals(8, p.getStock(), "El stock inicial debe coincidir con el valor del constructor");
+    public void testSetAndGetStock() {
+        Producto p = new Producto(1002, "Impresora", 120000.0, "Brasil");
+        p.setPrecioUnitario(150000.0);
+        assertEquals(150000.0, p.getPrecioUnitario(), "El precio unitario debe actualizarse correctamente");
     }
 }

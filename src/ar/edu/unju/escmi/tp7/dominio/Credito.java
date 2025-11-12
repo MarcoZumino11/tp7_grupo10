@@ -12,9 +12,11 @@ public class Credito {
 	private Cliente cliente;
 	private double montoCredito;
 
+	// Constructor vacío
 	public Credito() {
 	}
 
+	// Constructor principal
 	public Credito(TarjetaCredito tarjetaCredito, Factura factura, Cliente cliente, double montoCredito) {
 		this.tarjetaCredito = tarjetaCredito;
 		this.factura = factura;
@@ -22,10 +24,12 @@ public class Credito {
 		this.montoCredito = montoCredito;
 	}
 
+	// Constructor alternativo
 	public Credito(List<Cuota> cuotas) {
 		this.cuotas = cuotas;
 	}
 
+	// Métodos getters y setters
 	public TarjetaCredito getTarjetaCredito() {
 		return tarjetaCredito;
 	}
@@ -66,6 +70,7 @@ public class Credito {
 		this.montoCredito = montoCredito;
 	}
 
+	// Genera las 30 cuotas del crédito en base al total del plan Ahora 30
 	public void generarCuotas() {
 		double montoCuota = this.factura.calcularTotalAhora30() / 30;
 		int nroCuota = 0;
@@ -85,11 +90,12 @@ public class Credito {
 
 	}
 
+	// Muestra los datos del crédito completo
 	public void mostarCredito() {
 		System.out.println("***Tarjeta De Credito***" + tarjetaCredito + "\n" + factura + "\n\nCUOTAS:");
 		for (Cuota cuota : cuotas) {
 			System.out.println(cuota);
 		}
 	}
-
+	
 }

@@ -23,69 +23,76 @@ public class Main {
 
     public static void main(String[] args) {
 
+        // Se cargan los datos iniciales para tener ejemplos al iniciar el programa
         CollectionCliente.precargarClientes();
         CollectionTarjetaCredito.precargarTarjetas();
         CollectionProducto.precargarProductos();
         CollectionStock.precargarStocks();
+
         int opcion = 0;
+
         do {
             System.out.println("\n====== Menu Principal =====");
             System.out.println("1- Realizar una venta");
             System.out.println("2- Revisar compras realizadas por el cliente (debe ingresar el DNI del cliente)");
             System.out.println("3- Mostrar lista de los electrodomésticos");
             System.out.println("4- Consultar stock");
-            System.out.println("5- Revisar creditos de un cliente (debe ingresar el DNI del cliente)");
+            System.out.println("5- Revisar créditos de un cliente (debe ingresar el DNI del cliente)");
             System.out.println("6- Salir");
-
-            System.out.print("Ingrese su opcion: ");
+            System.out.print("Ingrese su opción: ");
             opcion = scanner.nextInt();
             scanner.nextLine();
 
             switch (opcion) {
                 case 1: {
-                    /* Se identifica al cliente */
+                    // Se identifica el cliente antes de realizar la venta
                     System.out.print("Ingrese el DNI del cliente: ");
                     long dniCliente = scanner.nextLong();
                     scanner.nextLine();
+
                     Cliente cliente = CollectionCliente.buscarCliente(dniCliente);
+
                     if (cliente == null) {
+                        // Si no se encuentra, se da la opción de registrarlo
                         System.out.println("*** Cliente no encontrado, ¿desea registrarlo? (SI/NO) ***");
                         String op = scanner.nextLine();
                         if (op.equalsIgnoreCase("SI")) {
 
                             System.out.print("Ingrese nombre: ");
                             String nombreCliente = scanner.nextLine();
-                            
-                            System.out.print("Ingrese direcion: ");
+
+                            System.out.print("Ingrese dirección: ");
                             String direccionCliente = scanner.nextLine();
-                            
-                            System.out.print("Ingrese telefono: ");
+
+                            System.out.print("Ingrese teléfono: ");
                             String telefonoCliente = scanner.nextLine();
-                            
+
                             cliente = new Cliente(dniCliente, nombreCliente, direccionCliente, telefonoCliente);
                             CollectionCliente.agregarCliente(cliente);
-                            System.out.println("--- Cliente registrado con exito, vuelva a intentar la compra ---");
-                        }
-                        else {
+                            System.out.println("--- Cliente registrado con éxito, vuelva a intentar la compra ---");
+                        } else {
                             System.out.println("*** No se puede continuar con la venta sin un cliente registrado ***");
                         }
-                    }
-                    else {
-                        /* Empieza la compra */
+                    } else {
+                        // Si el cliente existe, comienza la venta
                         LocalDate fecha = LocalDate.now();
                         Factura factura = new Factura(fecha, cliente);
+
                         double montoMaximoCelular = 0;
                         double montoMaximoElectrodomestico = 0;
                         double montoCompraTotalAhora30 = 0;
                         boolean seguirComprando = true;
                         TarjetaCredito tarjetaCredito = null;
+
                         while (seguirComprando) {
-                            /* Se seleccionan los productos */
+
+                            // Se pide el código del producto
                             System.out.print("Ingrese el código del producto: ");
                             int codigoProductoVenta = scanner.nextInt();
                             scanner.nextLine();
 
                             Producto producto = CollectionProducto.buscarProducto(codigoProductoVenta);
+
                             if (producto == null) {
                                 System.out.println("*** Producto no encontrado ***");
                                 continue;
@@ -93,138 +100,102 @@ public class Main {
 
                             System.out.print("Ingrese la cantidad: ");
                             int cantidadProducto = scanner.nextInt();
-                            scanner.nextLine(); // Para limpiar el buffer del scanner
+                            scanner.nextLine();
 
                             Stock stock = CollectionStock.buscarStock(producto);
 
-                            if (stock.validarStockDisponible(cantidadProducto) == false) {
-                                System.out.println("*** Stock insuficiente. Stock disponible: " + stock.getCantidad() + " ***");
-                            }
-                            else {
-
+                            // Validar si hay stock suficiente
+                            if (!stock.validarStockDisponible(cantidadProducto)) {
+                                System.out.println("*** Stock insuficiente. Disponible: " + stock.getCantidad() + " ***");
+                            } else {
                                 double precioTotal = producto.getPrecioUnitario() * cantidadProducto;
                                 LocalDate fechaLimite = LocalDate.of(2025, 12, 22);
 
-                                    if (CollectionProducto.buscarProductoAhora30(codigoProductoVenta)) {
-                                        if (fecha.isAfter(fechaLimite)){
-                                            System.out.println("*** El programa 'Ahora 30' ha finalizado ***");
-                                        }
-                                        else {
-                                            System.out.println("--- El producto es elegible para el programa 'Ahora 30' ---");
-                                            System.out.print("Ingrese numero de tarjeta de credito: ");
-                                            long numeroTarjeta = scanner.nextLong();
-                                            scanner.nextLine();
-                                            tarjetaCredito = CollectionTarjetaCredito.buscarTarjetaCredito(numeroTarjeta);
-                                            if (tarjetaCredito == null){
-                                                System.out.print("*** Tarjeta de credito no encontrada, ¿Desea agregar la tarjeta de credito? (SI/NO) ***");
-                                                String op = scanner.nextLine();
-                                                if (op.equalsIgnoreCase("SI")) {
-                                                    System.out.print("Ingrese fecha de caducacion: (AAAA-MM-DD)");
-                                                    String fechaCaducacion = scanner.nextLine();
-                                                    System.out.print("Ingrese el limite de compra: ");
-                                                    double limiteCompra = scanner.nextDouble();
-                                                    scanner.nextLine();
-                                                    tarjetaCredito = new TarjetaCredito(numeroTarjeta, LocalDate.parse(fechaCaducacion), cliente, limiteCompra);
-                                                    CollectionTarjetaCredito.agregarTarjetaCredito(tarjetaCredito);
-                                                    System.out.println("--- Tarjeta de credito agregada con exito, vuelva a intentar la compra ---");
+                                // Verificar si el producto pertenece al programa Ahora 30
+                                if (CollectionProducto.buscarProductoAhora30(codigoProductoVenta)) {
+                                    if (fecha.isAfter(fechaLimite)) {
+                                        System.out.println("*** El programa 'Ahora 30' ha finalizado ***");
+                                    } else {
+                                        System.out.println("--- Producto elegible para el programa 'Ahora 30' ---");
+                                        System.out.print("Ingrese número de tarjeta de crédito: ");
+                                        long numeroTarjeta = scanner.nextLong();
+                                        scanner.nextLine();
+
+                                        tarjetaCredito = CollectionTarjetaCredito.buscarTarjetaCredito(numeroTarjeta);
+
+                                        if (tarjetaCredito == null) {
+                                            System.out.print("*** Tarjeta no encontrada, ¿Desea agregarla? (SI/NO) ***");
+                                            String op = scanner.nextLine();
+
+                                            if (op.equalsIgnoreCase("SI")) {
+                                                System.out.print("Ingrese fecha de caducidad (AAAA-MM-DD): ");
+                                                String fechaCaducacion = scanner.nextLine();
+                                                System.out.print("Ingrese límite de compra: ");
+                                                double limiteCompra = scanner.nextDouble();
+                                                scanner.nextLine();
+
+                                                tarjetaCredito = new TarjetaCredito(numeroTarjeta, LocalDate.parse(fechaCaducacion), cliente, limiteCompra);
+                                                CollectionTarjetaCredito.agregarTarjetaCredito(tarjetaCredito);
+                                                System.out.println("--- Tarjeta registrada con éxito, vuelva a intentar la compra ---");
+                                            } else {
+                                                System.out.println("*** No se puede continuar sin una tarjeta registrada ***");
+                                            }
+                                        } else {
+                                            // Validaciones de tipo de producto y monto permitido
+                                            if (producto.getDescripcion().contains("celular")) {
+                                                montoMaximoCelular += precioTotal;
+                                                if (montoMaximoCelular > 800000) {
+                                                    System.out.println("*** Supera el límite de $800000 para celulares ***");
+                                                    montoMaximoCelular -= precioTotal;
+                                                    continue;
                                                 }
-                                                else {
-                                                    System.out.println("*** No se puede continuar con la venta del producto sin una tarjeta de credito registrada ***");
+                                            } else {
+                                                montoMaximoElectrodomestico += precioTotal;
+                                                if (montoMaximoElectrodomestico > 1500000) {
+                                                    System.out.println("*** Supera el límite de $1500000 para electrodomésticos ***");
+                                                    montoMaximoElectrodomestico -= precioTotal;
+                                                    continue;
                                                 }
                                             }
-                                            else {
-                                                if (producto.getDescripcion().contains("celular")) {
-                                                    montoMaximoCelular += precioTotal;
-                                                    if (montoMaximoCelular > 800000) {
-                                                        System.out.println("*** La compra de este producto excede el monto máximo permitido para celulares en el programa 'Ahora 30' ($800000). Compra actual de todos los productos: $" + montoMaximoCelular + " ***");
-                                                        montoMaximoCelular -= precioTotal;
-                                                        continue;
-                                                    }
-                                                    else {
-                                                        if (tarjetaCredito.tieneSaldoSuficiente(montoMaximoCelular)){
-                                                        System.out.println("--- La compra sigue con los requisitos del programa 'Ahora 30' ---");
-                                                        boolean estadoAhora30 = true;
-                                                        // Crear detalle
-                                                        Detalle detalle = new Detalle(cantidadProducto, precioTotal, producto, estadoAhora30);
-                                                        factura.agregarDetalle(detalle);
-                                                        tarjetaCredito.descontarMonto(precioTotal);
-                                                        System.out.println("--- Compra realizada con exito ---");
-                                                        // Actualizar stock
-                                                        stock.actualizarStock(cantidadProducto);
 
-                                                        montoCompraTotalAhora30 += precioTotal;
-                                                        }
-                                                        else {
-                                                            montoMaximoCelular -= precioTotal;
-                                                            System.out.println("*** Saldo insuficiente en la tarjeta, para este producto no se cumple con los requisitos para el programa 'Ahora 30' ***");
-                                                        }
-                                                    }
-                                                }
-                                                else {
-                                                    montoMaximoElectrodomestico += precioTotal;
-                                                    if (montoMaximoElectrodomestico > 1500000) {
-                                                        System.out.println("*** La compra de este producto excede el monto máximo permitido para electrodomésticos en el programa 'Ahora 30' ($1500000). Compra actual de todos los productos: $" + montoMaximoElectrodomestico + " ***");
-                                                        montoMaximoElectrodomestico -= precioTotal;
-                                                        continue;
-                                                    }
-                                                    else {
-                                                        if (tarjetaCredito.tieneSaldoSuficiente(montoMaximoElectrodomestico)){
-                                                        System.out.println("--- La compra sigue con los requisitos del programa 'Ahora 30' ---");
-                                                        boolean estadoAhora30 = true;
-                                                        // Crear detalle
-                                                        Detalle detalle = new Detalle(cantidadProducto, precioTotal, producto, estadoAhora30);
-                                                        factura.agregarDetalle(detalle);
-                                                        tarjetaCredito.descontarMonto(precioTotal);
-                                                        System.out.println("--- Compra realizada con exito ---");
-                                                        // Actualizar stock
-                                                        stock.actualizarStock(cantidadProducto);
-
-                                                        montoCompraTotalAhora30 += precioTotal;
-
-                                                        }
-                                                        else {
-                                                            montoMaximoElectrodomestico -= precioTotal;
-                                                            System.out.println("*** Saldo insuficiente en la tarjeta, para este producto no se cumple con los requisitos para el programa 'Ahora 30' ***");
-                                                        }
-                                                    }
-                                                }
+                                            if (tarjetaCredito.tieneSaldoSuficiente(precioTotal)) {
+                                                // Se genera el detalle de la compra
+                                                Detalle detalle = new Detalle(cantidadProducto, precioTotal, producto, true);
+                                                factura.agregarDetalle(detalle);
+                                                tarjetaCredito.descontarMonto(precioTotal);
+                                                stock.actualizarStock(cantidadProducto);
+                                                System.out.println("--- Compra realizada con éxito ---");
+                                                montoCompraTotalAhora30 += precioTotal;
+                                            } else {
+                                                System.out.println("*** Saldo insuficiente en la tarjeta ***");
                                             }
                                         }
-                                        
                                     }
-                                    else {
-                                        System.out.print("*** El producto no es elegible para el programa 'Ahora 30', ¿desea continuar con la compra del producto? (SI/NO) ***");
-                                        String op = scanner.nextLine();
-                                        if (op.equalsIgnoreCase("NO")) {
-                                            System.out.println("--- El producto no se agrego a la compra ---");
-                                            continue;
-                                        }
-                                        else {
-                                            boolean estadoAhora30 = false;
-                                            // Crear detalle
-                                            Detalle detalle = new Detalle(cantidadProducto, precioTotal, producto, estadoAhora30);
-                                            factura.agregarDetalle(detalle);
-                                            System.out.println("--- Compra realizada con exito ---");
-                                            // Actualizar stock
-                                            stock.actualizarStock(cantidadProducto);
-                                        }
+                                } else {
+                                    // Producto fuera del programa Ahora 30
+                                    System.out.print("*** Producto fuera del programa, ¿Desea comprarlo igual? (SI/NO) ***");
+                                    String op = scanner.nextLine();
+                                    if (op.equalsIgnoreCase("SI")) {
+                                        Detalle detalle = new Detalle(cantidadProducto, precioTotal, producto, false);
+                                        factura.agregarDetalle(detalle);
+                                        stock.actualizarStock(cantidadProducto);
+                                        System.out.println("--- Compra realizada con éxito ---");
                                     }
-                        
-                                /* Preguntar si sigue comprando */
+                                }
+
                                 System.out.print("¿Desea agregar otro producto? (s/n): ");
                                 String op = scanner.nextLine();
                                 seguirComprando = op.equalsIgnoreCase("s");
                             }
                         }
 
-                        if (factura.getDetalles().size() > 0) {
-
-                            // Crear crédito
+                        // Si hay productos en la factura, se genera la venta
+                        if (!factura.getDetalles().isEmpty()) {
                             if (montoCompraTotalAhora30 > 0) {
                                 Credito credito = new Credito(tarjetaCredito, factura, cliente, montoCompraTotalAhora30);
                                 credito.generarCuotas();
                                 CollectionCredito.agregarCredito(credito);
-                                System.out.println("--- Crédito generado para los productos Ahora30 ---");
+                                System.out.println("--- Crédito generado para los productos Ahora 30 ---");
                             }
                             System.out.println(factura);
                             CollectionFactura.agregarFactura(factura);
@@ -232,24 +203,28 @@ public class Main {
                         }
                     }
                     break;
-                } 
-                    
+                }
+
                 case 2:
-                    System.out.println("Ingrese el DNI del cliente a buscar sus compras: ");
+                    System.out.println("Ingrese el DNI del cliente: ");
                     long dniBuscarFactura = scanner.nextLong();
-                    // Mostrar facturas (ventas) del cliente
+
                     CollectionFactura.buscarFacturasPorDni(dniBuscarFactura);
                     break;
+
                 case 3:
-                    // Lógica para mostrar lista de productos incluidos en el ahora 30
+
                     CollectionProducto.mostrarProductosAhora30();
                     break;
+
                 case 4:
-                    // Mostrar stock de productos con Ahora 30
+
                     System.out.println("\n====== Stock de Productos Ahora 30 ======");
                     CollectionStock.mostrarStockAhora30();
                     break;
+
                 case 5:
+
                     System.out.println("Ingrese el DNI del cliente a buscar sus créditos: ");
                     long dni = scanner.nextLong();
                     CollectionCredito.buscarCreditoPorDni(dni);
@@ -260,6 +235,7 @@ public class Main {
             }
 
         } while (opcion != 6);
+
         scanner.close();
 
     }

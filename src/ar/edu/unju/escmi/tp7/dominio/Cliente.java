@@ -1,28 +1,25 @@
 package ar.edu.unju.escmi.tp7.dominio;
 
-
 public class Cliente {
 
 	private long dni;
 	private String nombre;
 	private String direccion;
 	private String telefono;
-	
-	public Cliente() {
 
+	// Constructor vacío
+	public Cliente() {
 	}
 
-
+	// Constructor con parámetros
 	public Cliente(long dni, String nombre, String direccion, String telefono) {
-		super();
 		this.dni = dni;
 		this.nombre = nombre;
 		this.direccion = direccion;
 		this.telefono = telefono;
 	}
 
-
-
+	// Getters y setters
 	public long getDni() {
 		return dni;
 	}
@@ -39,7 +36,6 @@ public class Cliente {
 		this.nombre = nombre;
 	}
 
-	
 	public String getDireccion() {
 		return direccion;
 	}
@@ -48,7 +44,6 @@ public class Cliente {
 		this.direccion = direccion;
 	}
 
-	
 	public String getTelefono() {
 		return telefono;
 	}
@@ -56,5 +51,5 @@ public class Cliente {
 	public void setTelefono(String telefono) {
 		this.telefono = telefono;
 	}
-
+	
 }
