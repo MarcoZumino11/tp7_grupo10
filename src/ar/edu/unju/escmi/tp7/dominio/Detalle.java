@@ -2,15 +2,17 @@ package ar.edu.unju.escmi.tp7.dominio;
 
 public class Detalle {
 
+    // Atributos de cada detalle de la factura
 	private int cantidad;
     private double importe;
     private Producto producto;
-    private boolean estadoAhora30; /* true = el detalle es de un producto 'Ahora 30' y false = el detalle no es de un producto 'Ahora 30' */
+    private boolean estadoAhora30; // true = pertenece al programa Ahora 30, false = producto normal
 
+    // Constructor vacío
     public Detalle() {
-
     }
 
+    // Constructor con parámetros
     public Detalle(int cantidad, double importe, Producto producto, boolean estadoAhora30) {
         this.cantidad = cantidad;
         this.importe = importe;
@@ -18,6 +20,7 @@ public class Detalle {
         this.estadoAhora30 = estadoAhora30;
     }
 
+    // Getters y setters
     public int getCantidad() {
         return cantidad;
     }
@@ -50,13 +53,14 @@ public class Detalle {
         this.estadoAhora30 = estadoAhora30;
     }
 
+    // Muestra la información completa del detalle
     @Override
     public String toString() {
         return "--- PRODUCTO ---" + producto + 
             "\nCANTIDAD: " + cantidad +
             "\nIMPORTE: $" + importe + 
             "\n" + (estadoAhora30 ? "PERTENECE AL PROGRAMA AHORA 30" : "PRODUCTO NORMAL");
-    }
+   
+        }
 
-    
 }

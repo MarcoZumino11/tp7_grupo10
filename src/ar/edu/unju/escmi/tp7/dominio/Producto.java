@@ -2,15 +2,17 @@ package ar.edu.unju.escmi.tp7.dominio;
 
 public class Producto {
 
+    // Atributos principales del producto
 	private long codigo;
     private String descripcion;
     private double precioUnitario;
     private String origenFabricacion;
 
+    // Constructor vacío
     public Producto() {
-
     }
 
+    // Constructor con parámetros
     public Producto(long codigo, String descripcion, double precioUnitario, String origenFabricacion) {
         this.codigo = codigo;
         this.descripcion = descripcion;
@@ -18,6 +20,7 @@ public class Producto {
         this.origenFabricacion = origenFabricacion;
     }
 
+    // Getters y setters
     public long getCodigo() {
         return codigo;
     }
@@ -50,9 +53,12 @@ public class Producto {
         this.origenFabricacion = origenFabricacion;
     }
 
+    // Muestra la información completa del producto
     @Override
     public String toString() {
-        return "\nCodigo: " + codigo + "\nDescripcion: " + descripcion + "\nPrecio Unitario: " + precioUnitario
+        return "\nCodigo: " + codigo 
+                + "\nDescripcion: " + descripcion 
+                + "\nPrecio Unitario: $" + precioUnitario
                 + "\nOrigen fabricacion: " + origenFabricacion;
     }
 }
